@@ -1,0 +1,214 @@
+REGISTERED_FREELANCERS = []
+REGISTERED_COMPANIES = []
+LIKED_FREELANCERS_BY_COMPANIES = {}
+LIKED_COMPANIES_BY_FREELANCERS = {}
+CURRENT_FREELANCER = None
+CURRENT_COMPANY = None
+
+
+class Freelancer:
+
+    def __init__(self, name, location, gmail, skills, experience, hourly_rate, username, password):
+        self.name = name
+        self.location = location
+        self.gmail = gmail
+        self.skills = skills
+        self.experience = experience
+        self.hourly_rate = hourly_rate
+        self.username = username
+        self.password = password
+
+
+class Company:
+
+    def __init__(self, company_name, available_jobs, required_skills, budgets, company_username, password):
+        self.company_name = company_name
+        self.available_jobs = available_jobs
+        self.required_skills = required_skills
+        self.budgets = budgets
+        self.company_username = company_username
+        self.password = password
+
+
+def register_freelancer():
+    name = input("PLease enter your name: ")
+    location = input("PLease enter your location: ")
+    gmail = input("PLease enter your gmail: ")
+    skills = input("PLease enter your skill with spacer").split()
+    experience = input("Please enter your experience: ")
+    hourly_rate = float(input("Please enter your hourly rate: "))
+    username = input("Please enter a username: ")
+    password = input("Please enter a password: ")
+
+    new_freelancer = Freelancer(name, location, gmail, skills, experience, hourly_rate, username, password)
+
+    REGISTERED_FREELANCERS.append(new_freelancer)
+    return "Registered successfully!"
+
+
+def login_freelancer():
+    global CURRENT_FREELANCER
+    username = input("Please enter your username: ")
+    password = input("Please enter your password: ")
+    for freelancer in REGISTERED_FREELANCERS:
+        if freelancer.username == username and freelancer.password == password:
+            CURRENT_FREELANCER = freelancer
+            return "Login successful"
+        elif freelancer.username == username and freelancer.password != password:
+            return "Wrong password!"
+
+    else:
+        return "User not found!"
+
+
+def log_out():
+    global CURRENT_FREELANCER
+    global CURRENT_COMPANY
+    choice = input("Are you sure yes/no")
+    if choice == "yes":
+        CURRENT_FREELANCER = None
+        CURRENT_COMPANY = None
+        print("Logged out successfully!")
+    elif choice == "no":
+        print("Stayed logged in!")
+    else:
+        print("Invalid choice!")
+
+
+def register_company():
+    company_name = input("Please enter companies name: ")
+    available_jobs = input("PLease enter your jobs by spacer: ").split()
+    required_skills = input("PLease enter your required skills by spacer: ").split()
+    budget = float(input("PLease enter your budget: "))
+    company_username = input("Enter your username: ")
+    password = input("PLease enter your password: ")
+    new_company = Company(company_name, available_jobs, required_skills, budget, company_username, password)
+    REGISTERED_COMPANIES.append(new_company)
+    return "Successfully registered company!"
+
+
+def login_company():
+    global CURRENT_COMPANY
+    username = input("Please enter your username: ")
+    password = input("Please enter your password: ")
+    found = False
+    for company in REGISTERED_COMPANIES:
+        if company.username == username and company.password == password:
+            CURRENT_COMPANY = company
+            return "Login successful"
+        elif company.username == username and company.password != password:
+            return "Wrong password!"
+
+    if not found:
+        return "User not found!"
+
+
+def display_jobs():
+    counter = 0
+    global CURRENT_FREELANCER
+    for companies in REGISTERED_COMPANIES:
+        print(f"Company name: {companies.company_name}\n "
+              f"Jobs: {' '.join(companies.available_jobs)}\n"
+              f"Budget: {companies.budgets}")
+        like_or_pass = input("Enter your choice like/pass: ")
+        if like_or_pass == "like":
+            if CURRENT_FREELANCER not in LIKED_COMPANIES_BY_FREELANCERS:
+                LIKED_COMPANIES_BY_FREELANCERS[CURRENT_FREELANCER] = [companies]
+            else:
+                LIKED_COMPANIES_BY_FREELANCERS[CURRENT_FREELANCER].append(companies)
+            print("Company added successfully to your list.")
+        counter += 1
+        if counter == len(REGISTERED_COMPANIES):
+            print("No more jobs!")
+            break
+
+
+def display_freelancers():
+    global CURRENT_COMPANY
+    for freelancers in REGISTERED_FREELANCERS:
+        print(f"Name: {freelancers.name}\n"
+              f"Location: {freelancers.location}\n"
+              f"Skills: {', '.join(freelancers.skills)}\n"
+              f"Experience: {freelancers.experience}\n"
+              f"Hourly rate: {freelancers.hourly_rate}\n"
+              f"Gmail: {freelancers.gmail}\n")
+        choice = input("Enter your choice like/pass: ")
+        if choice == "like":
+            if CURRENT_COMPANY not in LIKED_FREELANCERS_BY_COMPANIES:
+                LIKED_FREELANCERS_BY_COMPANIES[CURRENT_COMPANY] = [freelancers]
+            else:
+                LIKED_FREELANCERS_BY_COMPANIES[CURRENT_COMPANY].append(freelancers)
+            print("Freelancer added to your list successfully!")
+        elif choice == "pass":
+            pass
+        else:
+            print("Invalid choice!")
+
+
+def display_liked_companies():
+    liked = LIKED_COMPANIES_BY_FREELANCERS.get(CURRENT_FREELANCER, [])
+    for company in liked:
+        print(f"Company name: {company.company_name}\n"
+              f"Jobs: {', '.join(company.available_jobs)}\n"
+              f"Required Skills: {', '.join(company.required_skills)}\n"
+              f"Budgets: {company.budgets}\n")
+
+
+def display_liked_freelancers():
+    liked = LIKED_FREELANCERS_BY_COMPANIES.get(CURRENT_COMPANY, [])
+    for freelancer in liked:
+        print(f"Name: {freelancer.name}\n"
+              f"Location: {freelancer.location}\n"
+              f"Gmail: {freelancer.gmail}\n"
+              f"Skills: {freelancer.skills}\n"
+              f"Experience: {freelancer.experience}\n"
+              f"Hourly rate: {freelancer.hourly_rate}\n")
+
+
+def display_menu():
+    while True:
+        print("1. Are you a freelancer?")
+        print("2. Are you a company?")
+        print("3. Exit")
+        choice = int(input("PLease enter your choice: "))
+        if choice == 1:
+            print("1. Register")
+            print("2. Login")
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                print(register_freelancer())
+            elif choice == 2:
+                print(login_freelancer())
+                print("1. Start looking for job offers")
+                print("2. See liked companies.")
+                print("3. Log out!")
+                choice = int(input("Enter your choice: "))
+                if choice == 1:
+                    display_jobs()
+                elif choice == 2:
+                    display_liked_companies()
+                elif choice == 3:
+                    log_out()
+        elif choice == 2:
+            print("1. Register")
+            print("2. Login")
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                print(register_company())
+            elif choice == 2:
+                print(login_company())
+                print("1. Start looking for freelancers.")
+                print("2. See liked freelancers.")
+                print("3. Log out.")
+                choice = int(input("Please enter your choice: "))
+                if choice == 1:
+                    display_freelancers()
+                elif choice == 2:
+                    display_liked_freelancers()
+                elif choice == 3:
+                    log_out()
+        elif choice == 3:
+            exit()
+
+
+display_menu()
