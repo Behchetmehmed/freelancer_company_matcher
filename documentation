@@ -1,0 +1,95 @@
+Overview
+This is a command-line application written in Python that allows freelancers and companies to register, login, and interact by liking job offers or freelancer profiles. It simulates a simple matchmaking platform where freelancers can browse jobs from companies and companies can browse freelancers.
+
+Features
+Freelancer registration and login
+
+Company registration and login
+
+Browse job offers (companies) and freelancer profiles
+
+Like or pass on jobs or freelancers
+
+View liked companies or freelancers
+
+Logout functionality
+
+Installation and Setup
+Make sure you have Python 3 installed on your system.
+
+Download or clone the project repository.
+
+Run the main Python script:
+
+bash
+Copy
+Edit
+python main.py
+Usage Instructions
+For Freelancers
+Select Freelancer in the main menu.
+
+Choose to Register or Login.
+
+Once logged in:
+
+Browse job offers posted by companies.
+
+Like or pass on each job offer.
+
+View the list of companies you have liked.
+
+Log out when done.
+
+For Companies
+Select Company in the main menu.
+
+Choose to Register or Login.
+
+Once logged in:
+
+Browse freelancer profiles.
+
+Like or pass on freelancers.
+
+View the list of freelancers you have liked.
+
+Log out when done.
+
+Data Structures
+Freelancer class: Stores name, location, email, skills, experience, hourly rate, username, and password.
+
+Company class: Stores company name, available jobs, required skills, budget, username, and password.
+
+Global lists: Store registered freelancers and companies.
+
+Dictionaries: Track liked freelancers by companies and liked companies by freelancers.
+
+Global variables: Track currently logged-in user (freelancer or company).
+
+How It Works
+Users can register with necessary details.
+
+Upon login, users can browse the opposite user group (freelancers browse companies’ job offers, companies browse freelancers).
+
+Users choose to like or pass on profiles/job offers.
+
+Liked entities are saved in dictionaries associated with the current user.
+
+Users can view their liked lists at any time.
+
+Logging out clears the current session.
+
+Limitations and Future Improvements
+Data is stored in-memory; no persistent storage (database) is used.
+
+Passwords are stored in plain text — should implement hashing for security.
+
+No input validation or error handling for invalid inputs.
+
+The UI is text-based; consider building a GUI or web interface.
+
+Matching algorithm could be enhanced for better recommendations.
+
+Author
+Behchet Mehmed — behcetmehmed299@gmail.com
